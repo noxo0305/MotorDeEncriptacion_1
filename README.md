@@ -37,7 +37,7 @@ El proyecto está diseñado para permitir tanto la **encriptación** como la **d
 ## Requisitos Previos
 
 Para ejecutar este proyecto, necesitas tener instalados los siguientes programas:
-
+- Numpy
 - Python 3.x
 - Paquetes criptográficos (pueden instalarse con `pip`)
 
