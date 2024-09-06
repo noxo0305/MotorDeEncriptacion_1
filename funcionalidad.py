@@ -1,11 +1,19 @@
-import numpy as np
+imimport numpy as np
+
+class ErrorExepciones(Exception):
+    def __init__(self, mensaje="La matriz es singular (no invertible)."):
+        self.mensaje = mensaje
+        super().__init__(self.mensaje)
 
 class Encriptador:
     def __init__(self, clave):
         """
         Inicializa el encriptador con una clave y calcula su inversa.
+        Lanza ValueError si la clave no tiene inversa.
         """
         self.clave = np.array(clave)
+        if np.linalg.det(self.clave) == 0:
+            raise ValueError("La matriz no tiene inversa por lo que no se puede usar como clave")
         self.inversa_clave = np.linalg.inv(self.clave)
 
     def encriptar(self, mensaje):
@@ -19,7 +27,10 @@ class Encriptador:
     def desencriptar(self, mensaje_encriptado):
         """
         Desencripta un mensaje encriptado utilizando la inversa de la clave.
+        Lanza ValueError si el mensaje encriptado no es válido.
         """
+        if mensaje_encriptado.shape[0] != self.clave.shape[0]:
+            raise ValueError("El mensaje encriptado no es válido para la clave proporcionada")
         mensaje_vector = np.dot(self.inversa_clave, mensaje_encriptado)
         mensaje_desencriptado = self._convertir_a_texto(mensaje_vector)
         return mensaje_desencriptado
@@ -45,30 +56,21 @@ def tamaño_matriz(matriz):
     """
     Verifica si la matriz es de tamaño 2x2.
     """
-    return len(matriz) == 2 and all(len(fila) == 2 for fila in matriz)
-
-def recibir_matriz():
-    """
-    Recibe una matriz 2x2 del usuario.
-    """
-    clave = []
-    for _ in range(2):
-        fila = []
-        for _ in range(2):
-            valor = int(input("Ingrese un valor de la clave (total de 4 valores): "))
-            fila.append(valor)
-        clave.append(fila)
-    print("La clave ingresada es:", clave)
-    return clave
-
-def verificar_caso(clave, mensaje_original, mensaje_esperado):
-    encriptador = Encriptador(clave)
-    mensaje_encriptado = encriptador.encriptar(mensaje_original)
-    mensaje_desencriptado = encriptador.desencriptar(mensaje_encriptado)
-    
-    if mensaje_encriptado == mensaje_esperado and mensaje_desencriptado == mensaje_original:
-        print(f"Prueba con clave {clave} y mensaje '{mensaje_original}' PASÓ.")
+    if len(matriz) == 2 and all(len(fila) == 2 for fila in matriz):
+        return True
     else:
-        print(f"Prueba con clave {clave} y mensaje '{mensaje_original}' FALLÓ.")
-        print(f"Mensaje encriptado: {mensaje_encriptado}")
-        print(f"Mensaje desencriptado: {mensaje_desencriptado}")
+        raise ValueError("La matriz debe ser de tamaño 2x2")
+
+def matriz_no_singular(matriz):
+    """
+    Verifica si la matriz no es singular (es decir, tiene una inversa).
+    Lanza una excepción ValueError si la matriz es singular.
+    """
+
+    try:
+        if np.linalg.det(matriz) != 0:
+            return True
+        else:
+            raise ValueError("La matriz no tiene inversa por lo que no se puede usar como clave")
+    except np.linalg.LinAlgError as e:
+        raise ValueError(f"Error al calcular el determinante: {e}")
