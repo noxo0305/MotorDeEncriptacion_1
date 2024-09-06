@@ -1,80 +1,76 @@
 import unittest
 import numpy as np
-from funcionalidad import Encriptador
+from funcionalidad import Encryptor
 
-class TestEncriptador(unittest.TestCase):
+class TestEncryptor(unittest.TestCase):
     
-    def test_funciona_bien_1(self):
-        clave = [[2, 3], [1, 4]]
-        mensaje_original = "Hola"
-        encriptador = Encriptador(clave)
-        mensaje_encriptado = encriptador.encriptar(mensaje_original)
-        mensaje_desencriptado = encriptador.desencriptar(mensaje_encriptado)
-        self.assertEqual(mensaje_desencriptado, mensaje_original)
+    def test_works_well_1(self):
+        key = [[2, 3], [1, 4]]
+        original_message = "Hola"
+        encryptor = Encryptor(key)
+        encrypted_message = encryptor.encrypt(original_message)
+        decrypted_message = encryptor.decrypt(encrypted_message)
+        self.assertEqual(decrypted_message, original_message)
 
-    def test_funciona_bien_2(self):
-        clave = [[1, 0], [0, 1]]
-        mensaje_original = "Mundo"
-        encriptador = Encriptador(clave)
-        mensaje_encriptado = encriptador.encriptar(mensaje_original)
-        mensaje_desencriptado = encriptador.desencriptar(mensaje_encriptado)
-        self.assertEqual(mensaje_desencriptado, mensaje_original)
+    def test_works_well_2(self):
+        key = [[1, 0], [0, 1]]
+        original_message = "Mundo"
+        encryptor = Encryptor(key)
+        encrypted_message = encryptor.encrypt(original_message)
+        decrypted_message = encryptor.decrypt(encrypted_message)
+        self.assertEqual(decrypted_message, original_message)
 
-    def test_funciona_bien_3(self):
-        clave = [[4, 1], [2, 2]]
-        mensaje_original = "Python"
-        encriptador = Encriptador(clave)
-        mensaje_encriptado = encriptador.encriptar(mensaje_original)
-        mensaje_desencriptado = encriptador.desencriptar(mensaje_encriptado)
-        self.assertEqual(mensaje_desencriptado, mensaje_original)
+    def test_works_well_3(self):
+        key = [[4, 1], [2, 2]]
+        original_message = "Python"
+        encryptor = Encryptor(key)
+        encrypted_message = encryptor.encrypt(original_message)
+        decrypted_message = encryptor.decrypt(encrypted_message)
+        self.assertEqual(decrypted_message, original_message)
 
-    def test_limite_1(self):
-        clave = [[1, 0], [0, 0]]
-        mensaje_original = "A"
+    def test_limit_1(self):
+        key = [[1, 0], [0, 0]]
+        original_message = "A"
         with self.assertRaises(ValueError):
-            encriptador = Encriptador(clave)
+            encryptor = Encryptor(key)
 
-    def test_limite_2(self):
-        clave = [[0, 0], [0, 1]]
-        mensaje_original = "B" * 1000
+    def test_limit_2(self):
+        key = [[0, 0], [0, 1]]
+        original_message = "B" * 1000
         with self.assertRaises(ValueError):
-            encriptador = Encriptador(clave)
+            encryptor = Encryptor(key)
 
-    def test_limite_3(self):
-        clave = [[114534455, -1454545], [4545451, 15454545]]
-        mensaje_original = ""
-        encriptador = Encriptador(clave)
-        mensaje_encriptado = encriptador.encriptar(mensaje_original)
-        mensaje_desencriptado = encriptador.desencriptar(mensaje_encriptado)
-        self.assertEqual(mensaje_desencriptado, mensaje_original)
+    def test_limit_3(self):
+        key = [[114534455, -1454545], [4545451, 15454545]]
+        original_message = ""
+        encryptor = Encryptor(key)
+        encrypted_message = encryptor.encrypt(original_message)
+        decrypted_message = encryptor.decrypt(encrypted_message)
+        self.assertEqual(decrypted_message, original_message)
 
-    def test_falla_1(self):
-        clave = [[1, 1], [1, 1]]
-        mensaje_original = "Hola"
+    def test_fail_1(self):
+        key = [[1, 1], [1, 1]]
+        original_message = "Hola"
         with self.assertRaises(ValueError):
-            encriptador = Encriptador(clave)
+            encryptor = Encryptor(key)
 
-    def test_falla_2(self):
-        clave = [[2, 3], [1, 4]]
-        encriptador = Encriptador(clave)
-        mensaje_encriptado = np.array([1, 2, 3])  # Longitud incorrecta
+    def test_fail_2(self):
+        key = [[2, 3], [1, 4]]
+        encryptor = Encryptor(key)
+        encrypted_message = np.array([1, 2, 3])  # Incorrect length
         with self.assertRaises(ValueError):
-            encriptador.desencriptar(mensaje_encriptado)
+            encryptor.decrypt(encrypted_message)
 
-
-
-    def test_falla_3(self):
-        clave = [[1, 2, 3], [4, 5, 6]]  # No es una matriz cuadrada
+    def test_fail_3(self):
+        key = [[1, 2, 3], [4, 5, 6]]  # Not a square matrix
         with self.assertRaises(ValueError):
-            encriptador = Encriptador(clave)
+            encryptor = Encryptor(key)
 
-
-    def test_falla_4(self):
-        clave = [[1, 2], [3, 4, 5]]
-        mensaje_original = "Código"
+    def test_fail_4(self):
+        key = [[1, 2], [3, 4, 5]]
+        original_message = "Código"
         with self.assertRaises(ValueError):
-            encriptador = Encriptador(clave)
+            encryptor = Encryptor(key)
 
 if __name__ == '__main__':
     unittest.main()
-
