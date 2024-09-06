@@ -1,76 +1,76 @@
-imimport numpy as np
+import numpy as np
 
-class ErrorExepciones(Exception):
-    def __init__(self, mensaje="La matriz es singular (no invertible)."):
-        self.mensaje = mensaje
-        super().__init__(self.mensaje)
+class CustomException(Exception):
+    def __init__(self, message="The matrix is singular (non-invertible)."):
+        self.message = message
+        super().__init__(self.message)
 
-class Encriptador:
-    def __init__(self, clave):
+class Encryptor:
+    def __init__(self, key):
         """
-        Inicializa el encriptador con una clave y calcula su inversa.
-        Lanza ValueError si la clave no tiene inversa.
+        Initializes the encryptor with a key and calculates its inverse.
+        Raises ValueError if the key has no inverse.
         """
-        self.clave = np.array(clave)
-        if np.linalg.det(self.clave) == 0:
-            raise ValueError("La matriz no tiene inversa por lo que no se puede usar como clave")
-        self.inversa_clave = np.linalg.inv(self.clave)
+        self.key = np.array(key)
+        if np.linalg.det(self.key) == 0:
+            raise ValueError("The matrix has no inverse and cannot be used as a key")
+        self.inverse_key = np.linalg.inv(self.key)
 
-    def encriptar(self, mensaje):
+    def encrypt(self, message):
         """
-        Encripta un mensaje utilizando la clave.
+        Encrypts a message using the key.
         """
-        mensaje_vector = self._convertir_a_vector(mensaje)
-        mensaje_encriptado = np.dot(self.clave, mensaje_vector)
-        return mensaje_encriptado
+        message_vector = self._convert_to_vector(message)
+        encrypted_message = np.dot(self.key, message_vector)
+        return encrypted_message
 
-    def desencriptar(self, mensaje_encriptado):
+    def decrypt(self, encrypted_message):
         """
-        Desencripta un mensaje encriptado utilizando la inversa de la clave.
-        Lanza ValueError si el mensaje encriptado no es válido.
+        Decrypts an encrypted message using the inverse of the key.
+        Raises ValueError if the encrypted message is not valid.
         """
-        if mensaje_encriptado.shape[0] != self.clave.shape[0]:
-            raise ValueError("El mensaje encriptado no es válido para la clave proporcionada")
-        mensaje_vector = np.dot(self.inversa_clave, mensaje_encriptado)
-        mensaje_desencriptado = self._convertir_a_texto(mensaje_vector)
-        return mensaje_desencriptado
+        if encrypted_message.shape[0] != self.key.shape[0]:
+            raise ValueError("The encrypted message is not valid for the provided key")
+        message_vector = np.dot(self.inverse_key, encrypted_message)
+        decrypted_message = self._convert_to_text(message_vector)
+        return decrypted_message
 
-    def _convertir_a_vector(self, mensaje):
+    def _convert_to_vector(self, message):
         """
-        Convierte un mensaje de texto a un vector numérico.
+        Converts a text message to a numeric vector.
         """
-        mensaje_vector = [ord(char) for char in mensaje]
-        while len(mensaje_vector) % self.clave.shape[0] != 0:
-            mensaje_vector.append(0)
-        return np.array(mensaje_vector).reshape(-1, self.clave.shape[0]).T
+        message_vector = [ord(char) for char in message]
+        while len(message_vector) % self.key.shape[0] != 0:
+            message_vector.append(0)
+        return np.array(message_vector).reshape(-1, self.key.shape[0]).T
 
-    def _convertir_a_texto(self, mensaje_vector):
+    def _convert_to_text(self, message_vector):
         """
-        Convierte un vector numérico a un mensaje de texto.
+        Converts a numeric vector to a text message.
         """
-        mensaje_vector = mensaje_vector.T.flatten()
-        mensaje = ''.join(chr(int(round(num))) for num in mensaje_vector if num != 0)
-        return mensaje
+        message_vector = message_vector.T.flatten()
+        message = ''.join(chr(int(round(num))) for num in message_vector if num != 0)
+        return message
 
-def tamaño_matriz(matriz):
+def matrix_size(matrix):
     """
-    Verifica si la matriz es de tamaño 2x2.
+    Checks if the matrix is of size 2x2.
     """
-    if len(matriz) == 2 and all(len(fila) == 2 for fila in matriz):
+    if len(matrix) == 2 and all(len(row) == 2 for row in matrix):
         return True
     else:
-        raise ValueError("La matriz debe ser de tamaño 2x2")
+        raise ValueError("The matrix must be of size 2x2")
 
-def matriz_no_singular(matriz):
+def matrix_non_singular(matrix):
     """
-    Verifica si la matriz no es singular (es decir, tiene una inversa).
-    Lanza una excepción ValueError si la matriz es singular.
+    Checks if the matrix is non-singular (i.e., has an inverse).
+    Raises a ValueError if the matrix is singular.
     """
-
     try:
-        if np.linalg.det(matriz) != 0:
+        if np.linalg.det(matrix) != 0:
             return True
         else:
-            raise ValueError("La matriz no tiene inversa por lo que no se puede usar como clave")
+            raise ValueError("The matrix has no inverse and cannot be used as a key")
     except np.linalg.LinAlgError as e:
-        raise ValueError(f"Error al calcular el determinante: {e}")
+        raise ValueError(f"Error calculating the determinant: {e}")
+
