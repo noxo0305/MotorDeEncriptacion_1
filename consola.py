@@ -1,10 +1,21 @@
 from funcionalidad import *
-if __name__ == "__main__":
+def recibir_matriz():
+    """
+    Recibe una matriz 2x2 del usuario.
+    """
+    clave = []
+    for _ in range(2):
+        fila = []
+        for _ in range(2):
+            valor = int(input("Ingrese un valor de la clave (total de 4 valores): "))
+            fila.append(valor)
+        clave.append(fila)
+    print("La clave ingresada es:", clave)
+    return clave
+def main():
     clave = recibir_matriz()
-    while not tamaño_matriz(clave):
-        print("La matriz ingresada no cumple los requerimientos.")
+    while not  tamaño_matriz(clave):
         clave = recibir_matriz()
-
     encriptador = Encriptador(clave)
     opcion = int(input("Ingrese 1 si desea encriptar y 2 si desea desencriptar: "))
     while opcion not in [1, 2]:
@@ -19,3 +30,4 @@ if __name__ == "__main__":
         mensaje_encriptado = np.array(eval(input("Ingrese el mensaje encriptado (como lista de listas): ")))
         mensaje_desencriptado = encriptador.desencriptar(mensaje_encriptado)
         print("Mensaje desencriptado:", mensaje_desencriptado)
+main()
