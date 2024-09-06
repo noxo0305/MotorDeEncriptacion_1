@@ -60,3 +60,15 @@ def recibir_matriz():
         clave.append(fila)
     print("La clave ingresada es:", clave)
     return clave
+
+def verificar_caso(clave, mensaje_original, mensaje_esperado):
+    encriptador = Encriptador(clave)
+    mensaje_encriptado = encriptador.encriptar(mensaje_original)
+    mensaje_desencriptado = encriptador.desencriptar(mensaje_encriptado)
+    
+    if mensaje_encriptado == mensaje_esperado and mensaje_desencriptado == mensaje_original:
+        print(f"Prueba con clave {clave} y mensaje '{mensaje_original}' PASÓ.")
+    else:
+        print(f"Prueba con clave {clave} y mensaje '{mensaje_original}' FALLÓ.")
+        print(f"Mensaje encriptado: {mensaje_encriptado}")
+        print(f"Mensaje desencriptado: {mensaje_desencriptado}")
